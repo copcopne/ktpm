@@ -46,7 +46,7 @@
       <Text fx:id="answerDTxt" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Answers" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="6" />
       <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
          <children>
-            <Button fx:id="checkAnswerBtn" mnemonicParsing="false" onAction="#checkHandler" text="Check Answer" />
+            <Button mnemonicParsing="false" onAction="#checkHandler" text="Check Answer" />
             <Button mnemonicParsing="false" onAction="#NextHandler" text="Next Question" />
          </children>
          <padding>

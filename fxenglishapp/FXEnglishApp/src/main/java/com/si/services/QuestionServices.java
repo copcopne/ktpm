@@ -4,6 +4,7 @@
  */
 package com.si.services;
 
+import com.si.pojo.Category;
 import com.si.pojo.Choice;
 import com.si.pojo.JdbcUtils;
 import com.si.pojo.Question;
@@ -19,7 +20,7 @@ import java.util.List;
  * @author admin
  */
 public class QuestionServices {
-    public List<Question> getQuestion(int num) throws SQLException {
+    public List<Question> getQuestions(int num) throws SQLException {
         List<Question> result = new ArrayList<>();
         try(Connection conn = JdbcUtils.getConn()) {
             PreparedStatement stm = conn.prepareCall("SELECT * FROM question ORDER BY rand() LIMIT ?");
@@ -35,6 +36,12 @@ public class QuestionServices {
     }
     
     
+    public List<Question> getQuestions() {
+        List<Question> result = new ArrayList<>();
+        
+    }
+    
+    
     public List<Choice> getChoices(String question_id) throws SQLException {
         List<Choice> result = new ArrayList<>();
         try(Connection conn = JdbcUtils.getConn()) {
@@ -47,6 +54,19 @@ public class QuestionServices {
                 result.add(c);
             }
             return result;
+        }
+    }
+    public Category getCategory(String category_id) throws SQLException {
+        Category c = null;
+        try(Connection conn = JdbcUtils.getConn()) {
+            PreparedStatement stm = conn.prepareCall("SELECT * FROM category WHERE id=?");
+            stm.setString(1, category_id);
+            
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()) {
+                c = new Category(rs.getInt("id"), rs.getString("name"));
+            }
+            return c;
         }
     }
 }
