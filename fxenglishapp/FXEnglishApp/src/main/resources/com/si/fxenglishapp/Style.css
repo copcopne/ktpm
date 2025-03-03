@@ -1,0 +1,12 @@
+GridPane {
+    -fx-background-color: lightblue;
+}
+Text.Subject {
+    -fx-font-size: 30;
+    -fx-font-weight: bold;
+    -fx-fill: red;
+    
+}
+Text.Question, Text.Answers {
+    -fx-font-size: 20;
+}
