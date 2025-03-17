@@ -4,7 +4,6 @@
  */
 package com.si.services;
 
-import com.si.pojo.Category;
 import com.si.pojo.Choice;
 import com.si.pojo.JdbcUtils;
 import com.si.pojo.Question;
@@ -36,37 +35,43 @@ public class QuestionServices {
     }
     
     
-    public List<Question> getQuestions() {
+    public List<Question> getQuestions(String kw) throws SQLException {
         List<Question> result = new ArrayList<>();
-        
-    }
-    
-    
-    public List<Choice> getChoices(String question_id) throws SQLException {
-        List<Choice> result = new ArrayList<>();
         try(Connection conn = JdbcUtils.getConn()) {
-            PreparedStatement stm = conn.prepareCall("SELECT * FROM choice WHERE question_id=?");
-            stm.setString(1, question_id);
-            
+            PreparedStatement stm = conn.prepareCall("SELECT * FROM question WHERE content like concat('%', ?, '%') ORDER BY id desc");
+            stm.setString(1, kw);
             ResultSet rs = stm.executeQuery();
             while(rs.next()) {
-                Choice c = new Choice(rs.getString("id"), rs.getString("content"), rs.getBoolean("is_correct"), rs.getString("question_id"));
-                result.add(c);
+                Question q = new Question(rs.getString("id"), rs.getString("content"), rs.getInt("category_id"));
+                result.add(q);
             }
-            return result;
-        }
+        return result;
     }
-    public Category getCategory(String category_id) throws SQLException {
-        Category c = null;
+}
+    
+    
+    public void InsertQuestions(Question q, List<Choice> choices) throws SQLException {
         try(Connection conn = JdbcUtils.getConn()) {
-            PreparedStatement stm = conn.prepareCall("SELECT * FROM category WHERE id=?");
-            stm.setString(1, category_id);
+            conn.setAutoCommit(false);
+            String sql = "INSERT INTO question(id, content, category_id) VALUES(?, ?, ?)";
+            PreparedStatement stm = conn.prepareCall(sql);
+            stm.setString(1, q.getId());
+            stm.setString(2, q.getContent());
+            stm.setInt(3, q.getCategoryId());
+            int k = stm.executeUpdate();
             
-            ResultSet rs = stm.executeQuery();
-            while(rs.next()) {
-                c = new Category(rs.getInt("id"), rs.getString("name"));
+            for(var c: choices) {
+                sql = "INSERT INTO choice(id, content, is_correct, question_id) VALUES(?, ?, ?, ?)";
+                PreparedStatement stm2 = conn.prepareCall(sql);
+                stm2.setString(1, c.getId());
+                stm2.setString(2, c.getContent());
+                stm2.setBoolean(3, c.isCorrect());
+                stm2.setString(4, c.getQuestionId());
+                int l = stm2.executeUpdate();
             }
-            return c;
+            
+            conn.commit();
+            
         }
     }
 }

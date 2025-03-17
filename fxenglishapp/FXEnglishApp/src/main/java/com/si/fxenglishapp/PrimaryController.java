@@ -1,6 +1,7 @@
 package com.si.fxenglishapp;
 
 import com.si.pojo.Question;
+import com.si.services.ChoiceServices;
 import com.si.services.QuestionServices;
 import java.io.IOException;
 import java.net.URL;
@@ -47,7 +48,7 @@ public class PrimaryController implements Initializable{
         
         if(q.getChoices() == null) {
             try {
-                QuestionServices s = new QuestionServices();
+                ChoiceServices s = new ChoiceServices();
                 q.setChoices(s.getChoices(q.getId()));
             } catch (SQLException ex) {
                 Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);

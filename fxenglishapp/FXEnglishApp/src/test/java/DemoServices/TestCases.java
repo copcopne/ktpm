@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DemoServices;
-import com.si.pojo.Category;
 import com.si.pojo.Question;
 import com.si.services.QuestionServices;
 import java.sql.SQLException;
@@ -15,10 +14,21 @@ import org.junit.jupiter.api.Assertions;
  * @author admin
  */
 public class TestCases {
+     private static QuestionServices s = new QuestionServices();
+    
     @Test
-    public void CategoryNotNull() throws SQLException {
-        QuestionServices s = new QuestionServices();
-        List<Question> inputList = s.getQuestions(0);
-        boolean expectedOutput = true;
+    public void testCategoryIsNotNull() throws SQLException {
+        List<Question> questions = s.getQuestions(2);
+        for (var q: questions)
+            Assertions.assertTrue(q.getCategoryId() > 0);
+    }
+    
+    @Test
+    public void testChoices() throws SQLException {
+        List<Question> questions = s.getQuestions(5);
+        for (var q: questions) {
+            q.setChoices(s.getChoices(q.getId()));
+            Assertions.assertTrue(q.getChoices().size() == 4);
+        }
     }
 }
