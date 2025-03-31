@@ -74,4 +74,16 @@ public class QuestionServices {
             
         }
     }
+        
+    public void deleteQuestion(String id) throws SQLException {
+        try(Connection conn = JdbcUtils.getConn()) {
+           conn.setAutoCommit(false);
+           String sql = "DELETE FROM question WHERE id=?";
+           PreparedStatement stm = conn.prepareCall(sql);
+           stm.setString(1, id);
+           int l = stm.executeUpdate();
+           
+           conn.commit();
+        }
+    }
 }

@@ -82,4 +82,11 @@ public class Question {
     public void setChoices(List<Choice> choices) {
         this.choices = choices;
     }
+
+    @Override
+    public String toString() {
+        return this.id;
+    }
+    
+    
 }

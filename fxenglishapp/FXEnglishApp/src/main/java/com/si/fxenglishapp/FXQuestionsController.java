@@ -21,9 +21,12 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -86,7 +89,28 @@ public class FXQuestionsController implements Initializable {
         TableColumn colCate = new TableColumn("Danh mục");
         colCate.setCellValueFactory(new PropertyValueFactory("categoryId"));
         
-        this.tbQuestion.getColumns().addAll(colContent, colCate);
+        TableColumn colAction = new TableColumn();
+        colAction.setCellFactory(e -> {
+            Button btn = new Button("Xóa");
+            
+            btn.setOnAction(evt -> {
+                String id = ((TableRow)(((Button)evt.getSource()).getParent().getParent())).getItem().toString();
+                QuestionServices s = new QuestionServices();
+                try {
+                    s.deleteQuestion(id);
+                    loadTableData("");
+                } catch (SQLException ex) {
+                    Logger.getLogger(FXQuestionsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            });
+            
+            TableCell cell = new TableCell();
+            cell.setGraphic(btn);
+            return cell;
+        });
+        
+        this.tbQuestion.getColumns().addAll(colContent, colCate, colAction);
     }
     public void InsertHandler(ActionEvent e) {
         Question q = new Question(UUID.randomUUID().toString(),txtConent.getText()
@@ -108,7 +132,6 @@ public class FXQuestionsController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(FXQuestionsController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         
     }
 }

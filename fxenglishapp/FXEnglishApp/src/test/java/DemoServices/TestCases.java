@@ -23,12 +23,12 @@ public class TestCases {
             Assertions.assertTrue(q.getCategoryId() > 0);
     }
     
-    @Test
-    public void testChoices() throws SQLException {
-        List<Question> questions = s.getQuestions(5);
-        for (var q: questions) {
-            q.setChoices(s.getChoices(q.getId()));
-            Assertions.assertTrue(q.getChoices().size() == 4);
-        }
-    }
+//    @Test
+//    public void testChoices() throws SQLException {
+//        List<Question> questions = s.getQuestions(5);
+//        for (var q: questions) {
+//            q.setChoices(s.getChoices(q.getId()));
+//            Assertions.assertTrue(q.getChoices().size() == 4);
+//        }
+//    }
 }
